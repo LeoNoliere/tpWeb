@@ -4,56 +4,51 @@
 function DnD(canvas, interactor) {
 	// Définir ici les attributs de la 'classe'
 	
-	var initialX =0;
-	var initialY=0;
-	var finalX=0;
-	var finalY=0;
-	
-	var press = false;
+	this.initialX =0;
+	this.initialY=0;
+	this.finalX=0;
+	this.finalY=0;	
+	this.press = false;
+  this.interactor = interactor;
+
 	
 	
 
 	// Developper les 3 fonctions gérant les événements
-  DnD.pression = function(evt){
-    press = true;
+  this.pression = function(evt){
+    this.press = true;
     
     var pos = getMousePosition(canvas, evt);
     
-    initialX = pos.x;
-    initialY = pos.y;
-
-    console.log(initialX);
-    console.log(initialY);
-  }
+    this.initialX = pos.x;
+    this.initialY = pos.y
+    this.interactor.onInterractionStart(this);
+  }.bind(this);
   
-  DnD.deplacement = function(evt){
-    if(press) {
+  this.deplacement = function(evt){
+    if(this.press) {
       var pos = getMousePosition(canvas, evt);
       
-      finalX = pos.x;
-      finalY = pos.y;
+      this.finalX = pos.x;
+      this.finalY = pos.y;
 
-      console.log(finalX);
-      console.log(finalY);
+      this.interactor.onInterractionUpdate(this);
     }
-  }
+  }.bind(this);
   
-  DnD.relachement = function(evt){
-    if(press) {
+  this.relachement = function(evt){
+    if(this.press) {
       
       var pos = getMousePosition(canvas, evt);
       
-      finalX = pos.x;
-      finalY = pos.y;
+      this.finalX = pos.x;
+      this.finalY = pos.y;
       
-      press= false;
+      this.press= false;
 
-
-      console.log(finalX);
-      console.log(finalY);
-
+      this.interactor.onInterractionEnd(this);      
     }
-  }
+  }.bind(this);
   
 	// Associer les fonctions précédentes aux évènements du canvas.
 	
